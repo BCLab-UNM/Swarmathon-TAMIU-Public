@@ -44,6 +44,7 @@ private:
   // Search state
   // Flag to allow special behaviour for the first waypoint
   bool first_waypoint = true;
+  bool second_waypoint = false;
   bool succesfullPickup = false;
 };
 
