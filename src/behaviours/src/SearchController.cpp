@@ -54,114 +54,68 @@ Result SearchController::DoWork() {
 
 
 
-    if (first_waypoint)//(first_waypoint)//works march 7
+    if (first_waypoint)//moves rover towards first waypoint
     {
-      first_waypoint = false;//works march 7
-      searchLocation.theta = currentLocation.theta + M_PI;//works march 7
-	cout<<"1searchLocation.theta ";
-	cout<<searchLocation.theta;
-      searchLocation.x = currentLocation.x + (5.15 * cos(searchLocation.theta)); //works march 7
-	cout<<"2searchLocation.x ";
-	cout<<searchLocation.x;
-      //searchLocation.y = currentLocation.y + (5.15 * sin(searchLocation.theta)); //works march 7
-	cout<<"3searchLocation.y ";
-	cout<<searchLocation.y;
-      
+      first_waypoint = false;
+      searchLocation.theta = currentLocation.theta + M_PI;
+      searchLocation.x = currentLocation.x + (5.15 * cos(searchLocation.theta));
     }
-    if(wumbo>0)//works march 7
+    if(wumbo>0)//Square Spiral
     {
-      //select new heading from Gaussian distribution around current heading
-      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians//works march 7
-	cout<<"4 Square searchLocation.theta";
-	cout<<searchLocation.theta;
-      searchLocation.x = currentLocation.x + (wumbo * cos(searchLocation.theta)); //CR//works march 7
-	cout<<"5 Square searchLocation.x";
-	cout<<searchLocation.x;
-      searchLocation.y = currentLocation.y + (smittywerbenjagermanjensen * sin(searchLocation.theta)); //works march 7
-	cout<<"6 Square searchLocation.y";
-	cout<<searchLocation.y;
-	wumbo=wumbo-0.3; ///0.4 works //a//works march 7
-	smittywerbenjagermanjensen=smittywerbenjagermanjensen-0.3; //b//works march 7
-
+      searchLocation.theta = currentLocation.theta - M_PI/2; 
+      searchLocation.x = currentLocation.x + (wumbo * cos(searchLocation.theta)); 
+      searchLocation.y = currentLocation.y + (smittywerbenjagermanjensen * sin(searchLocation.theta)); 
+	wumbo=wumbo-0.3; 
+	smittywerbenjagermanjensen=smittywerbenjagermanjensen-0.3; //
     }
-
-    if(smittywerbenjagermanjensen < 0.5)
+    if(smittywerbenjagermanjensen < 0.5)//moves rover to another quadrant after smitty value reaches less than 0.5 meters in square spiral
 {
     searchLocation.x = currentLocation.x + (8.0 * cos(searchLocation.theta)); 
     z=z + 1;
-//z = z + 0.2;
     wumbo=0;
-    //mermaidman=1;
-    //barnacleboy=1;
-    
-    
 }
-
-
-    if(z > 1.8) //works march 7
-    {
-
-      
-//select new heading from Gaussian distribution around current heading
-      searchLocation.theta = currentLocation.theta + M_PI/2; //90 degrees in radians//works march 7
-	
-      searchLocation.x = currentLocation.x + (mermaidman * cos(searchLocation.theta)); //CR//works march 7
-
-      searchLocation.y = currentLocation.y + (barnacleboy * sin(searchLocation.theta)); //works march 7
-
-	mermaidman=mermaidman+0.3; ///0.4 works //a //works march 7
-	barnacleboy=barnacleboy+0.3; //b //works march 7
+    if(z > 1.8) //Reverse square spiral
+    { 
+      searchLocation.theta = currentLocation.theta + M_PI/2; 
+      searchLocation.x = currentLocation.x + (mermaidman * cos(searchLocation.theta)); 
+      searchLocation.y = currentLocation.y + (barnacleboy * sin(searchLocation.theta)); 
+	mermaidman=mermaidman+0.3; 
+	barnacleboy=barnacleboy+0.3;
         smittywerbenjagermanjensen=1;
-        //q=1;
 }
-
-
-     if(barnacleboy>4.5)//4.5 works
+     if(barnacleboy>4.5) //send rover towards home position
 {
         z=0;
 	searchLocation.theta= centerLocation.theta;
         searchLocation.theta= centerLocation.theta;
         pinheadlarry=1;
 }
-
-
-
-    if (pinheadlarry >0 )//(first_waypoint)//works march 7
+    if (pinheadlarry >0 )//sends rovers to new quadrant for big field 
     {
       barnacleboy=0;
-      searchLocation.theta = currentLocation.theta + M_PI;//works march 7
-
-      searchLocation.x = currentLocation.x + (8 * cos(searchLocation.theta)); //works march 7
+      searchLocation.theta = currentLocation.theta + M_PI;
+      searchLocation.x = currentLocation.x + (8 * cos(searchLocation.theta)); 
       dirtydan=1;
 }
 
-
-
-
-    if(dirtydan >0)//works march 7
+    if(dirtydan >0) //Square spiral for big field
     {
-      
       pinheadlarry=0;
-//select new heading from Gaussian distribution around current heading
-      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians//works march 7
-
-      searchLocation.x = currentLocation.x + (a * cos(searchLocation.theta)); //CR//works march 7
-
-      searchLocation.y = currentLocation.y + (b * sin(searchLocation.theta)); //works march 7
-
-	a=a-0.3; ///0.4 works //a//works march 7
-	b=b-0.3; //b//works march 7
-
+      searchLocation.theta = currentLocation.theta - M_PI/2;
+      searchLocation.x = currentLocation.x + (a * cos(searchLocation.theta)); 
+      searchLocation.y = currentLocation.y + (b * sin(searchLocation.theta)); 
+	a=a-0.3; 
+	b=b-0.3;
     }
-
-
-    else
+    else //end of code, will trigger full reset of search pattern from first waypoint
 { 
-dirtydan=0;
-searchLocation.theta= centerLocation.theta;
-first_waypoint=true;
-
+     dirtydan=0;
+     searchLocation.theta= centerLocation.theta;
+     first_waypoint=true;
 }
+
+
+
     result.wpts.waypoints.clear();
     result.wpts.waypoints.insert(result.wpts.waypoints.begin(), searchLocation);
     
