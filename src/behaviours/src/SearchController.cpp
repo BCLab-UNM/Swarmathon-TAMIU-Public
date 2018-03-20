@@ -1,15 +1,17 @@
 //code version 3162018
 #include "SearchController.h"
 #include <angles/angles.h>
+#include <iostream>
+using namespace std;
 
-
-double wumbo=0, smittywerbenjagermanjensen=6.3, mermaidman=0.1, barnacleboy=0.1,pinheadlarry=0, a=9,b=9,c=0,d=0, f=0,z=0,q=10;
+double wumbo=5.0, smittywerbenjagermanjensen=5.0, mermaidman=0.0, barnacleboy=0.0,pinheadlarry=0,dirtydan=0, a=8,b=8,c=0,d=0, f=0,z=0,q=0;
 SearchController::SearchController() {
   rng = new random_numbers::RandomNumberGenerator();
   currentLocation.x = 0;
   currentLocation.y = 0;
   currentLocation.theta = 0;
-
+  
+  
   centerLocation.x = 0;
   centerLocation.y = 0;
   centerLocation.theta = 0;
@@ -50,70 +52,116 @@ Result SearchController::DoWork() {
     result.type = waypoint;
     Point  searchLocation;
 
-    if (first_waypoint)
+
+
+    if (first_waypoint)//(first_waypoint)//works march 7
     {
-      first_waypoint = false;//works march 16 //inital position for spiral
-      searchLocation.theta = currentLocation.theta + M_PI;//works march 16
-      searchLocation.x = currentLocation.x + (5.10 * cos(searchLocation.theta)); //works march 16
-      searchLocation.y = currentLocation.y + (5.10 * sin(searchLocation.theta)); //works march 16
-      wumbo = 5.6;
+      first_waypoint = false;//works march 7
+      searchLocation.theta = currentLocation.theta + M_PI;//works march 7
+	cout<<"1searchLocation.theta ";
+	cout<<searchLocation.theta;
+      searchLocation.x = currentLocation.x + (5.15 * cos(searchLocation.theta)); //works march 7
+	cout<<"2searchLocation.x ";
+	cout<<searchLocation.x;
+      //searchLocation.y = currentLocation.y + (5.15 * sin(searchLocation.theta)); //works march 7
+	cout<<"3searchLocation.y ";
+	cout<<searchLocation.y;
+      
     }
-    else if(wumbo>0)//works march 16 // Square spiral
+    if(wumbo>0)//works march 7
+    {
+      //select new heading from Gaussian distribution around current heading
+      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians//works march 7
+	cout<<"4 Square searchLocation.theta";
+	cout<<searchLocation.theta;
+      searchLocation.x = currentLocation.x + (wumbo * cos(searchLocation.theta)); //CR//works march 7
+	cout<<"5 Square searchLocation.x";
+	cout<<searchLocation.x;
+      searchLocation.y = currentLocation.y + (smittywerbenjagermanjensen * sin(searchLocation.theta)); //works march 7
+	cout<<"6 Square searchLocation.y";
+	cout<<searchLocation.y;
+	wumbo=wumbo-0.3; ///0.4 works //a//works march 7
+	smittywerbenjagermanjensen=smittywerbenjagermanjensen-0.3; //b//works march 7
+
+    }
+
+    if(smittywerbenjagermanjensen < 0.5)
+{
+    searchLocation.x = currentLocation.x + (8.0 * cos(searchLocation.theta)); 
+    z=z + 1;
+//z = z + 0.2;
+    wumbo=0;
+    //mermaidman=1;
+    //barnacleboy=1;
+    
+    
+}
+
+
+    if(z > 1.8) //works march 7
+    {
+
+      
+//select new heading from Gaussian distribution around current heading
+      searchLocation.theta = currentLocation.theta + M_PI/2; //90 degrees in radians//works march 7
+	
+      searchLocation.x = currentLocation.x + (mermaidman * cos(searchLocation.theta)); //CR//works march 7
+
+      searchLocation.y = currentLocation.y + (barnacleboy * sin(searchLocation.theta)); //works march 7
+
+	mermaidman=mermaidman+0.3; ///0.4 works //a //works march 7
+	barnacleboy=barnacleboy+0.3; //b //works march 7
+        smittywerbenjagermanjensen=1;
+        //q=1;
+}
+
+
+     if(barnacleboy>4.5)//4.5 works
+{
+        z=0;
+	searchLocation.theta= centerLocation.theta;
+        searchLocation.theta= centerLocation.theta;
+        pinheadlarry=1;
+}
+
+
+
+    if (pinheadlarry >0 )//(first_waypoint)//works march 7
+    {
+      barnacleboy=0;
+      searchLocation.theta = currentLocation.theta + M_PI;//works march 7
+
+      searchLocation.x = currentLocation.x + (8 * cos(searchLocation.theta)); //works march 7
+      dirtydan=1;
+}
+
+
+
+
+    if(dirtydan >0)//works march 7
     {
       
-      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians//works march 16
-      searchLocation.x = currentLocation.x + (wumbo * cos(searchLocation.theta)); //CR//works march 16
-      searchLocation.y = currentLocation.y + (smittywerbenjagermanjensen * sin(searchLocation.theta)); //works march 16
-	wumbo=wumbo-0.3; ///0.4 works //a//works march 16
-	smittywerbenjagermanjensen = smittywerbenjagermanjensen-0.3; //b//works march 16
+      pinheadlarry=0;
+//select new heading from Gaussian distribution around current heading
+      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians//works march 7
+
+      searchLocation.x = currentLocation.x + (a * cos(searchLocation.theta)); //CR//works march 7
+
+      searchLocation.y = currentLocation.y + (b * sin(searchLocation.theta)); //works march 7
+
+	a=a-0.3; ///0.4 works //a//works march 7
+	b=b-0.3; //b//works march 7
 
     }
 
 
-///////experimental march 16
+    else
+{ 
+dirtydan=0;
+searchLocation.theta= centerLocation.theta;
+first_waypoint=true;
 
-
-
-   else if (smittywerbenjagermanjensen<1.5)//works march 16 //this allows the rovers to move to next quadrant downwards
-{
-
-	//searchLocation.theta = currentLocation.theta - M_PI;// works march 16
-        searchLocation.x = currentLocation.x +(6.35 * cos(searchLocation.theta)); //works march 16 //2.35 works
-        searchLocation.y = currentLocation.y +(0.0 * sin(searchLocation.theta)); //works march 16
-	smittywerbenjagermanjensen=3;
-	
-	q=0.4;
 }
-  else if (q<0.5) // reverse square spiral
-   {
-     
-      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians_change 4:42
-      searchLocation.x = currentLocation.x + (mermaidman * cos(searchLocation.theta)); 
-      searchLocation.y = currentLocation.y + (barnacleboy * sin(searchLocation.theta)); 
-	mermaidman=mermaidman+0.3; 
-	barnacleboy=barnacleboy+0.3;
-   }
-
-
-
-
-  /*  else if (q<0.5) //EH big field
-    { 
-	
-      //select new heading from Gaussian distribution around current heading
-      searchLocation.theta = currentLocation.theta - M_PI/2; //90 degrees in radians
-      searchLocation.x = currentLocation.x + (a * cos(searchLocation.theta)); //CR
-      searchLocation.y = currentLocation.y + (b * sin(searchLocation.theta)); //CR
-	a=a-0.3; ///0.4 works //CR//a
-	b=b-0.3; //b
-   }
-   */
-
-
-
-
-
-
     result.wpts.waypoints.clear();
     result.wpts.waypoints.insert(result.wpts.waypoints.begin(), searchLocation);
     
