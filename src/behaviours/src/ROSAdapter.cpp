@@ -109,7 +109,7 @@ long int startTime = 0;	//stores time when robot is swtiched on
 float minutesTime = 0;	//time in minutes
 float hoursTime = 0;	//time in hours
 
-float drift_tolerance = 10.5; // the perceived difference between ODOM and GPS values before shifting the values up or down, in meters
+float drift_tolerance = 0.5; // the perceived difference between ODOM and GPS values before shifting the values up or down, in meters
 
 Result result;		//result struct for passing and storing values to drive robot
 
